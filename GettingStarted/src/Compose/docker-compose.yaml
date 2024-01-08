@@ -1,0 +1,92 @@
+version: '3'
+services:
+  sqlserver:
+    restart: unless-stopped
+    env_file:
+        - .env
+    image: "mcr.microsoft.com/mssql/server:latest"
+    ports:
+      - ${SQL_PORT}:1433
+      - 1433
+    volumes:
+      - "./sql/data:/var/opt/mssql/data"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${DB_PASSWORD}
+      - MSSQL_PID=Developer
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${DB_PASSWORD} -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      retries: 10
+      start_period: 10s
+      timeout: 3s
+  sqlserver.configurator:
+    image: "mcr.microsoft.com/mssql-tools:latest"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    command: >
+      bash -c "
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P ${DB_PASSWORD} -d master -Q \"IF DB_ID('sys') IS NULL BEGIN CREATE DATABASE [sys]; ALTER DATABASE [sys] SET AUTO_CLOSE OFF; END;\"
+      "
+  platform_dev:    
+    restart: unless-stopped
+    env_file:
+      - .env
+    image: tompitdev/connected:latest-debug
+    depends_on:
+      sqlserver.configurator:
+        condition: service_completed_successfully
+    environment:      
+    - ASPNETCORE_URLS=http://0.0.0.0:44003
+    - sys__url=http://localhost:44003    
+    - instanceEndpoints__0__url=http://localhost:${DEV_PORT}
+    - stage=development
+    - storage__databases__defaultConnectionString=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
+    - settings__0__value=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
+    - sys__token=${INSTANCE_TOKEN}
+    - debugTarget__url=platform_qa:44003
+    - debugTarget__token=${INSTANCE_TOKEN}
+    - deployment__userToken=${PORTAL_TOKEN}
+    ports:
+      - ${DEV_PORT}:44003
+    volumes:
+      - ./dev/microServices:/microServices:rw
+      - ./dev/packages:/home/tompit/packages:rw
+      - ./dev/debugger:/nonexistent:rw
+    healthcheck:
+      test: ["CMD-SHELL", "nc -vz localhost 44003"]
+      interval: 10s
+      retries: 10
+      start_period: 300s
+      timeout: 30s
+  platform_qa:    
+    restart: unless-stopped
+    env_file:
+      - .env
+    image: tompitdev/connected:latest-debug
+    depends_on:
+      sqlserver.configurator:
+        condition: service_completed_successfully
+      platform_dev:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "nc -vz localhost 44003"]
+      interval: 10s
+      retries: 10
+      start_period: 300s
+      timeout: 30s
+    environment:    
+    - ASPNETCORE_URLS=http://0.0.0.0:44003
+    - sys__url=http://localhost:44003  
+    - instanceEndpoints__0__url=http://localhost:${QA_PORT}
+    - storage__databases__defaultConnectionString=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
+    - settings__0__value=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
+    - sys__token=${INSTANCE_TOKEN}
+    ports:
+      - ${QA_PORT}:44003
+      - 44003
+    volumes:
+      - ./qa/microServices:/microServices:rw
+      - ./qa/packages:/home/tompit/packages:rw
+      - ./qa/debugger:/nonexistent:rw
