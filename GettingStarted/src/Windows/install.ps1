@@ -52,10 +52,10 @@ Set-Location $installPath
 if(test-path -Path "$installPath/Docs"){
     Set-Location "Docs"
     git pull
-    Set-Location "GettingStarted/Compose"
+    Set-Location "GettingStarted/src/Compose"
 }else{    
     git clone https://github.com/Tom-PIT/Docs.git
-    Set-Location "Docs/GettingStarted/Compose"
+    Set-Location "Docs/GettingStarted/src/Compose"
 }
 
 explorer .

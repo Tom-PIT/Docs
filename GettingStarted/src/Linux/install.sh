@@ -36,10 +36,10 @@ echo "Cloning repository"
 if [ -d "$installPath/Docs" ]; then
   cd Docs
   git pull
-  cd GettingStarted/Compose
+  cd GettingStarted/src/Compose
 else
   git clone https://github.com/Tom-PIT/Docs.git
-  cd Docs/GettingStarted/Compose
+  cd Docs/GettingStarted/src/Compose
 fi
 
 ls -l
