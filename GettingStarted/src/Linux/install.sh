@@ -42,7 +42,7 @@ else
   cd Docs/GettingStarted/src/Compose
 fi
 
-ls -l
+ls -la
 
 ## Complete
 echo "Setup complete. Press Enter to continue..."
