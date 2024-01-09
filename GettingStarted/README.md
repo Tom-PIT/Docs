@@ -14,8 +14,7 @@ The prerequisites are required in order to launch a development environment easi
 - [Windows](#prepare-windows)
 - [Linux](#prepare-linux)
 
-<a href="#prepare-windows"></a>
-### Windows
+### Windows {#prepare-windows}
 There are two ways of installing the platform and prerequisites on Microsoft Windows (Win 10 and up). The first is fully automated and can be accessed by opening an <b>administrator</b> PowerShell and pasting the following:
 
 ```ps
@@ -87,8 +86,7 @@ Alternatively, follow the steps below:
     explorer .
     ```
 
-<a href="#prepare-linux"></a>
-### Linux
+### Linux {#prepare-linux}
 There are two ways of installing the platform and prerequisites on a Debian based linux distro.
 The first is fully automated and can be accessed by opening a Terminal and pasting the following:
 
