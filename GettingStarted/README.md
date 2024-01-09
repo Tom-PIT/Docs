@@ -4,7 +4,7 @@ This guide shows the necessary steps to perform a first launch and start using t
 ## Prerequisites
 This guide assumes the user has administrator access on the specific OS they're using. This is required for package installation and software startup.
 
-The prerequisites are required in order to launch a development environment easily. If you already have all the prerequisites installed, you may skip these steps and continue to [container configuration](#container-configuration).
+The prerequisites are required in order to launch a development environment easily. If you already have all the prerequisites installed, you may skip these steps and continue to [container configuration](#configuration).
 - Docker (linux images)
 - WSL (Windows only)
 - GIT (Optional, but recommended)
@@ -19,7 +19,7 @@ The prerequisites are required in order to launch a development environment easi
 There are two ways of installing the platform and prerequisites on Microsoft Windows (Win 10 and up). The first is fully automated and can be accessed by opening an <b>administrator</b> PowerShell and pasting the following:
 
 ```ps
-. { Invoke-WebRequest -useb https://github.com/Tom-PIT/Docs/tree/main/GettingStarted/Windows/install.ps1 } | Invoke-Expression; install 
+. { Invoke-WebRequest -useb https://github.com/Tom-PIT/Docs/tree/main/GettingStarted/src/Windows/install.ps1 } | Invoke-Expression; install 
 ```
 
 Alternatively, follow the steps below:
@@ -94,7 +94,7 @@ There are two ways of installing the platform and prerequisites on a Debian base
 The first is fully automated and can be accessed by opening a Terminal and pasting the following:
 
 ```bash
-curl -L https://github.com/Tom-PIT/Docs/tree/main/GettingStarted/Linux/install.sh | sudo bash
+curl -L https://github.com/Tom-PIT/Docs/tree/main/GettingStarted/src/Linux/install.sh | sudo bash
 ```
 
 Alternatively, follow the steps below:
@@ -140,8 +140,9 @@ Alternatively, follow the steps below:
     ```
 
 ### Starting the platform environment
+<a name="configuration"></a>
 #### .env configuration
-There are two files required to start the platform, supplied in the [GettingStarted/Compose](https://github.com/Tom-PIT/Docs/tree/main/GettingStarted) directory of this repository.
+There are two files required to start the platform, supplied in the [GettingStarted/Compose](https://github.com/Tom-PIT/Docs/tree/main/GettingStarted/src/Compose) directory of this repository.
 
 Regardless of you using the install script or following the preparation steps, you ended up in a directory containing both these files:
 - docker-compose.yaml (instructions for docker setup and container management).
