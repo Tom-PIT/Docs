@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Welcome to the Tom PIT platform install script. This script will set up your development machine to the point of the first platform run."
-read -p "Please enter the path into which to install the first start repository: " installPath 
+read -p "Please enter the path into which to install the first start repository: " installPath < /dev/tty
 
 ##Ensure install folder exists and is empty
 mkdir -p $installPath
@@ -46,4 +46,4 @@ ls -l
 
 ## Complete
 echo "Setup complete. Press Enter to continue..."
-read
+read 
