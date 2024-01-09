@@ -54,7 +54,7 @@ if(test-path -Path "$installPath/Docs"){
     git pull
     Set-Location "GettingStarted/Compose"
 }else{    
-    git clone git@github.com:Tom-PIT/Docs.git
+    git clone https://github.com/Tom-PIT/Docs.git
     Set-Location "Docs/GettingStarted/Compose"
 }
 
