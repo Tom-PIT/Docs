@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    image: tompitdev/connected:latest-debug
+    image: tompitdev/platform:latest-debug
     depends_on:
       sqlserver.configurator:
         condition: service_completed_successfully
@@ -64,7 +64,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    image: tompitdev/connected:latest-debug
+    image: tompitdev/platform:latest-debug
     depends_on:
       sqlserver.configurator:
         condition: service_completed_successfully
