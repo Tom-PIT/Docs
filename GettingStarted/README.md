@@ -94,7 +94,7 @@ There are two ways of installing the platform and prerequisites on a Debian base
 The first is fully automated and can be accessed by opening a Terminal and pasting the following:
 
 ```bash
-curl -L https://raw.githubusercontent.com/Tom-PIT/Docs/main/GettingStarted/src/Linux/install.sh | sudo bash
+source <(curl -s https://raw.githubusercontent.com/Tom-PIT/Docs/main/GettingStarted/src/Linux/install.sh)
 ```
 
 Alternatively, follow the steps below:
