@@ -49,12 +49,15 @@ winget install git.git
 ## Clone repo and open explorer
 write-host "Cloning repository"
 Set-Location $installPath
-if(test-path "$installPath/Docs"){
-    git clone git@github.com:Tom-PIT/Docs.git
-}else{
+if(test-path -Path "$installPath/Docs"){
+    Set-Location "Docs"
     git pull
+    Set-Location "GettingStarted/Compose"
+}else{    
+    git clone git@github.com:Tom-PIT/Docs.git
+    Set-Location "Docs/GettingStarted/Compose"
 }
-Set-Location Docs/GettingStarted/Compose
+
 explorer .
 
 ## Complete
