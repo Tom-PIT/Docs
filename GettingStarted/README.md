@@ -82,7 +82,7 @@ Alternatively, follow the steps below:
     ```ps
     mkdir C:/exampleDirectory
     cd C:/exampleDirectory
-    git clone git@github.com:Tom-PIT/Docs.git
+    git clone https://github.com/Tom-PIT/Docs.git
     cd Docs/GettingStarted/Compose
     explorer .
     ```
@@ -135,7 +135,7 @@ Alternatively, follow the steps below:
     ```bash
     sudo mkdir /exampleDir
     cd /exampleDir
-    git clone git@github.com:Tom-PIT/Docs.git
+    git clone https://github.com/Tom-PIT/Docs.git
     cd Docs/GettingStarted/Compose
     ```
 
@@ -153,7 +153,7 @@ Before running the docker-compose script, a single change MUST be made to the <i
 The token can be retrieved in the following ways, substituting the username and password for your own data where applicable:
 
 ##### Windows
-```ps
+```
 $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
 $headers.Add("Content-Type", "application/json")
 
