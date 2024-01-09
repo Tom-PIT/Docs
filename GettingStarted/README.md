@@ -19,7 +19,7 @@ The prerequisites are required in order to launch a development environment easi
 There are two ways of installing the platform and prerequisites on Microsoft Windows (Win 10 and up). The first is fully automated and can be accessed by opening an <b>administrator</b> PowerShell and pasting the following:
 
 ```ps
-. { Invoke-WebRequest -useb https://github.com/Tom-PIT/Docs/tree/main/GettingStarted/src/Windows/install.ps1 } | Invoke-Expression; install 
+Invoke-expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/Tom-PIT/Docs/main/GettingStarted/src/Windows/install.ps1'))
 ```
 
 Alternatively, follow the steps below:
@@ -94,7 +94,7 @@ There are two ways of installing the platform and prerequisites on a Debian base
 The first is fully automated and can be accessed by opening a Terminal and pasting the following:
 
 ```bash
-curl -L https://github.com/Tom-PIT/Docs/tree/main/GettingStarted/src/Linux/install.sh | sudo bash
+curl -L https://raw.githubusercontent.com/Tom-PIT/Docs/main/GettingStarted/src/Linux/install.sh | sudo bash
 ```
 
 Alternatively, follow the steps below:
