@@ -45,11 +45,11 @@ services:
     - storage__databases__defaultConnectionString=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
     - settings__0__value=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
     - sys__token=${INSTANCE_TOKEN}
-    - debugTarget__url=platform_qa:44003
+    - debugTarget__url=http://platform_qa:44003
     - debugTarget__token=${INSTANCE_TOKEN}
-    - deployment__userToken=${PORTAL_TOKEN}
     ports:
       - ${DEV_PORT}:44003
+      - 44003
     volumes:
       - ./dev/microServices:/microServices:rw
       - ./dev/packages:/home/tompit/packages:rw
@@ -78,7 +78,8 @@ services:
       timeout: 30s
     environment:    
     - ASPNETCORE_URLS=http://0.0.0.0:44003
-    - sys__url=http://localhost:44003  
+    - features=Application, Worker, Cdn, Rest, Search, BigData, IoT, Development, Management
+    - sys__url=http://platform_dev:44003  
     - instanceEndpoints__0__url=http://localhost:${QA_PORT}
     - storage__databases__defaultConnectionString=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
     - settings__0__value=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
