@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    image: tompitdev/platform:latest-debug
+    image: tompitdev/platform:latest
     depends_on:
       sqlserver.configurator:
         condition: service_completed_successfully
@@ -78,6 +78,7 @@ services:
       timeout: 30s
     environment:    
     - ASPNETCORE_URLS=http://0.0.0.0:44003
+    - optimization=debug
     - features=Application, Worker, Cdn, Rest, Search, BigData, IoT, Development, Management
     - sys__url=http://platform_dev:44003  
     - instanceEndpoints__0__url=http://localhost:${QA_PORT}
