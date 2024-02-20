@@ -20,6 +20,12 @@ services:
       retries: 10
       start_period: 10s
       timeout: 3s
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
   sqlserver.configurator:
     image: "mcr.microsoft.com/mssql-tools:latest"
     depends_on:
@@ -33,7 +39,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    image: tompitdev/platform:latest
+    image: tompitdev/platform:latest-debug
     depends_on:
       sqlserver.configurator:
         condition: service_completed_successfully
@@ -42,11 +48,14 @@ services:
     - sys__url=http://localhost:44003    
     - instanceEndpoints__0__url=http://localhost:${DEV_PORT}
     - stage=development
-    - storage__databases__defaultConnectionString=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
-    - settings__0__value=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
+    - features=${DEV_FEATURES}
+    - storage__databases__defaultConnectionString=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
+    - settings__0__value=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
     - sys__token=${INSTANCE_TOKEN}
     - debugTarget__url=http://platform_qa:44003
     - debugTarget__token=${INSTANCE_TOKEN}
+    - TP_SHELL_MODE=0
+    - Logging__LogLevel__Default=Warning
     ports:
       - ${DEV_PORT}:44003
       - 44003
@@ -57,9 +66,15 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "nc -vz localhost 44003"]
       interval: 10s
-      retries: 10
+      retries: 31
       start_period: 300s
       timeout: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
   platform_qa:    
     restart: unless-stopped
     env_file:
@@ -72,19 +87,20 @@ services:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "nc -vz localhost 44003"]
-      interval: 10s
-      retries: 10
+      interval: 5s
+      retries: 65
       start_period: 300s
       timeout: 30s
     environment:    
     - ASPNETCORE_URLS=http://0.0.0.0:44003
     - optimization=debug
-    - features=Application, Worker, Cdn, Rest, Search, BigData, IoT, Development, Management
+    - features=${QA_FEATURES}
     - sys__url=http://platform_dev:44003  
     - instanceEndpoints__0__url=http://localhost:${QA_PORT}
-    - storage__databases__defaultConnectionString=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
-    - settings__0__value=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;
+    - storage__databases__defaultConnectionString=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
+    - settings__0__value=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
     - sys__token=${INSTANCE_TOKEN}
+    - Logging__LogLevel__Default=Warning
     ports:
       - ${QA_PORT}:44003
       - 44003
@@ -92,3 +108,9 @@ services:
       - ./qa/microServices:/microServices:rw
       - ./qa/packages:/home/tompit/packages:rw
       - ./qa/debugger:/nonexistent:rw
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
