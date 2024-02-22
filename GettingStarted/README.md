@@ -178,3 +178,7 @@ There are a few things to be wary of when starting the mini cluster; the first s
 Once the QA instance is fully running, the platform is ready to start development.
 
 On all subsequent restarts of the mini cluster (docker-compose down), the database initialization and microservice installation steps are skipped.
+
+## Troubleshooting
+### My instance won't start
+First of all, run an instance without changing any variables in the .env file and without changing the docker-compose.yaml file. If it starts up then, chances are there is a conflict in your settings somewhere. Be wary of the # sign, as it is interpreted as a comment in .env and .yaml files.
