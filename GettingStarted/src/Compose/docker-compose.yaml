@@ -39,7 +39,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    image: tompitdev/platform:latest
+    image: tompitdev/platform:latest-debug
     depends_on:
       sqlserver.configurator:
         condition: service_completed_successfully
@@ -56,6 +56,11 @@ services:
     - debugTarget__token=${INSTANCE_TOKEN}
     - TP_SHELL_MODE=0
     - Logging__LogLevel__Default=Warning
+    - routing__baseUrl:http://localhost:${DEV_PORT}  
+    - settings__1__name=Cors Enabled
+    - settings__1__value=true
+    - settings__2__name=Cors Origins
+    - settings__2__value=http://localhost:44003,http://localhost:${DEV_PORT},http://localhost:${QA_PORT}
     ports:
       - ${DEV_PORT}:44003
       - 44003
@@ -101,6 +106,11 @@ services:
     - settings__0__value=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
     - sys__token=${INSTANCE_TOKEN}
     - Logging__LogLevel__Default=Warning
+    - routing__baseUrl:http://localhost:${QA_PORT}
+    - settings__1__name=Cors Enabled
+    - settings__1__value=true
+    - settings__2__name=Cors Origins
+    - settings__2__value=http://localhost:44003,http://localhost:${QA_PORT}
     ports:
       - ${QA_PORT}:44003
       - 44003
