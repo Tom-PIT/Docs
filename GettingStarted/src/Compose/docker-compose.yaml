@@ -101,7 +101,12 @@ services:
     - optimization=debug
     - features=${QA_FEATURES}
     - sys__url=http://platform_dev:44003  
-    - instanceEndpoints__0__url=http://localhost:${QA_PORT}
+    - instanceEndpoints__0__url=http://127.0.0.1:44003
+    - instanceEndpoints__0__name=Internal features
+    - instanceEndpoints__0__features=BigData, Search, Worker, Sys
+    - instanceEndpoints__1__url=http://localhost:${QA_PORT}
+    - instanceEndpoints__1__name=External features
+    - instanceEndpoints__1__features=Application, Development, Management, Cdn, Rest, IoT
     - storage__databases__defaultConnectionString=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
     - settings__0__value=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
     - sys__token=${INSTANCE_TOKEN}
