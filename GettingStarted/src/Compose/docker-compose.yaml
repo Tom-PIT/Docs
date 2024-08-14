@@ -45,8 +45,8 @@ services:
         condition: service_completed_successfully
     environment:      
     - ASPNETCORE_URLS=http://0.0.0.0:44003
-    - sys__url=http://localhost:44003    
-    - instanceEndpoints__0__url=http://localhost:${DEV_PORT}
+    - sys__url=http://127.0.0.1:44003    
+    - instanceEndpoints__0__url=http://127.0.0.1:${DEV_PORT}
     - stage=development
     - features=${DEV_FEATURES}
     - storage__databases__defaultConnectionString=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
@@ -56,11 +56,11 @@ services:
     - debugTarget__token=${INSTANCE_TOKEN}
     - TP_SHELL_MODE=0
     - Logging__LogLevel__Default=Warning
-    - routing__baseUrl=http://localhost:${DEV_PORT}  
+    - routing__baseUrl=http://127.0.0.1:${DEV_PORT}  
     - settings__1__name=Cors Enabled
     - settings__1__value=true
     - settings__2__name=Cors Origins
-    - settings__2__value=http://localhost:44003,http://localhost:${DEV_PORT},http://localhost:${QA_PORT}
+    - settings__2__value=http://127.0.0.1:44003,http://127.0.0.1:${DEV_PORT},http://127.0.0.1:${QA_PORT}
     ports:
       - ${DEV_PORT}:44003
       - 44003
@@ -69,7 +69,7 @@ services:
       - ./dev/packages:/home/tompit/packages:rw
       - ./dev/debugger:/nonexistent:rw
     healthcheck:
-      test: ["CMD-SHELL", "nc -vz localhost 44003"]
+      test: ["CMD-SHELL", "nc -vz 127.0.0.1 44003"]
       interval: 10s
       retries: 31
       start_period: 300s
@@ -91,7 +91,7 @@ services:
       platform_dev:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "nc -vz localhost 44003"]
+      test: ["CMD-SHELL", "nc -vz 127.0.0.1 44003"]
       interval: 5s
       retries: 65
       start_period: 300s
@@ -104,18 +104,18 @@ services:
     - instanceEndpoints__0__url=http://127.0.0.1:44003
     - instanceEndpoints__0__name=Internal features
     - instanceEndpoints__0__features=BigData, Search, Worker, Sys
-    - instanceEndpoints__1__url=http://localhost:${QA_PORT}
+    - instanceEndpoints__1__url=http://127.0.0.1:${QA_PORT}
     - instanceEndpoints__1__name=External features
     - instanceEndpoints__1__features=Application, Development, Management, Cdn, Rest, IoT
     - storage__databases__defaultConnectionString=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
     - settings__0__value=data source=sqlserver;initial catalog=sys;user id=sa;password=${DB_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true;
     - sys__token=${INSTANCE_TOKEN}
     - Logging__LogLevel__Default=Warning
-    - routing__baseUrl=http://localhost:${QA_PORT}
+    - routing__baseUrl=http://127.0.0.1:${QA_PORT}
     - settings__1__name=Cors Enabled
     - settings__1__value=true
     - settings__2__name=Cors Origins
-    - settings__2__value=http://localhost:44003,http://localhost:${QA_PORT}
+    - settings__2__value=http://127.0.0.1:44003,http://127.0.0.1:${QA_PORT}
     ports:
       - ${QA_PORT}:44003
       - 44003
