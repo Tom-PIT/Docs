@@ -82,7 +82,7 @@ Schema management is done via [Schema Providers](../Data/SchemaProviders.md) and
 
 ## Consistency
 
-*Connected* is a multi user environment which means many users can compete for the same resources at the same time. It's unimaginable how difficult is to implement a reliable and consistent solutions which solves this kind of problems. Luckly, *Connected* provides all the necessary services to avoid multi user environment problems. One of the challenges is to ensure data is stored consistent and if more than one user is doing the same operation on the same entity, the system still guarantees the data consistency.
+*Connected* is a multi user environment which means many users can compete for the same resources at the same time. It's unimaginable how difficult is to implement a reliable and consistent solutions which solves this kind of problems. Luckily, *Connected* provides all the necessary services to avoid multi user environment problems. One of the challenges is to ensure data is stored consistent and if more than one user is doing the same operation on the same entity, the system still guarantees the data consistency.
 
 - To learn more how *Connected* ensures a consistency, please read the [Consistency](Consistency.md) chapter.
 
