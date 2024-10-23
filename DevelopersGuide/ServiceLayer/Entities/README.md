@@ -1,15 +1,15 @@
 # Entities
-```Entity``` is one of the four basic [artifacts](../Artifacts/README.md) in the *Connected* platform. ```Entity``` represents a two dimensional data structure. It provides a set of primitive properties which together defines a complex object called ```Entity```.
+```Entity``` is one of the four [artifacts](../Artifacts/README.md) in the *Connected* platform. ```Entity``` represents a two dimensional data structure. It provides a set of primitive properties which together define a complex object called ```Entity```.
 
-```Entity``` does not prescribe its behavior or storage. It is basically just a data structure. The behavior is added in the implementation which enables the *Connected* digital content to be flexible. In one environment the same ```Entity``` can have a local permanent storage but completely different in other one, a remote or virtual one, for example.
+```Entity``` does not prescribe its behavior or storage. It is basically just a definition of the data structure. The behavior is added in the implementation which enables the *Connected* digital content to be flexible. In one environment the same ```Entity``` can have a local permanent storage but completely different in other one, a remote or virtual one, for example.
 
 Event in the local, physical storage, which is most commonly a database, ```Entity``` does not prescribe the storage type. In one environment a storage can be Microsoft SQL Server®, but a PostGre in the other one or Oracle in the third one. Entity model in completely independent of the physical storage.
 
 ## Model
 
-*Connected* identifies entity if it implements ```IEntity``` interface. This means that event for the most trivial data structures, which can have a single property, we should implement this interface. There are no other rules to the entities, except the [guideline](../../Guidelines/README.md) that they should be two dimensional because most relational databases would have a difficulty storing other types of data structures. 
+*Connected* identifies entity if it implements ```IEntity``` interface. This means that even for the most trivial data structures, which can have a single property, we should implement this interface. There are no other rules to the entities, except the [Guidelines](../../Guidelines/README.md) of which the most important is that they should be two dimensional because most relational databases would have a difficulty storing other types of data structures. 
 
-Below is the example implementation of the schema model.
+Below is the example of the schema model.
 ```csharp
 public interface IMaterial : IEntity
 {
@@ -24,15 +24,15 @@ This is a perfect example of the entity. It's a model, not an implementation. No
 
 ## Foreign keys
 
-A common relational database design is to use ```foreign keys```. It's a design which introduces dependencies of records on the database level. *Connected* does not support ```foreign keys```. There are several reasons for that.
+A common relational database design is to use ```foreign keys```. It's a design which introduces dependencies on records on the database level. *Connected* does not support ```foreign keys```. There are several reasons for that.
 
-First, *Connected* is an application platform, which means all the business logic is implemented in the application process not the database one. By introducing ```foreign keys``` two layers would do the same thing, application layer would perform a validation, and the database layer also.
+First, *Connected* is an application platform, which means all the business logic is implemented in the application process not the database one. By introducing ```foreign keys```, two layers would do the same thing, application layer would perform a validation, and the database layer also, which is not necessary.
 
-Next reason is that *Connected* platform does not require user to deal with database schemas. *Connected* does it completely and it does it perfectly. There is no need to create tables, manage schemas, their changes and deploy them when upgrading the system. *Connected* is fully in charge which means changes to the ```Entity``` sometimes requires database table to be recreated. if the table has dependencies this task could become very complex, sometimes even not possible to execute. We want to avoid this, of course, since manual database upgrade introduces new challenges and risks.
+Next reason is that *Connected* platform does not allows user to deal with database schemas. *Connected* does it completely by itself and it does it perfectly. There is no need to create tables, manage schemas, their changes and deploy them when upgrading the system. *Connected* is fully in charge which means changes to the ```Entity``` sometimes requires database table to be recreated. If the table has dependencies this task could become very complex, sometimes even impossible to execute. We want to avoid this, of course, since manual database upgrade introduces new challenges and risks.
 
 ## Immutability
 
-```Entities``` in *Connected* are immutable. It means once their properties are defined, they cannot change. This is why the ```init setter``` if defined in the model. It's very important concept and implementors should follow it without expections.
+```Entities``` in *Connected* are immutable. It means once their properties are defined, they cannot change. This is why the ```init setter``` is defined in the model. It's very important concept and implementors should follow it without expections.
 
 To learn more about immutability of the ```Entities```, read the [Immutability](Immutable.md) chapter.
 
@@ -58,13 +58,12 @@ internal record Tag : ITag
 > [!WARNING]
 > Be careful when defining the ```Table``` attribute because the attribute with the same name exists both in ```TomPIT.Annotations.Entities``` and ```TomPIT.Annotations.Models```. The latter one is from the [Shell](../../Environment/Shell.md) and *Connected* does not recognize it as a valid attribute.
 
-For guidelines about how to implement an ```Entity``` read [Entities Guidelines](../../Guidelines/Entities.md).
-
-For more information about ```Entity``` attributes read [Entity Attributes](Attributes.md).
+- For guidelines about how to implement an ```Entity```, please read [Entities Guidelines](../../Guidelines/Entities.md).
+- For more information about ```Entity``` attributes, please read [Entity Attributes](Attributes.md).
 
 ## Records
 
-All [Core](../../Environment/Core.md) microservices follows the pattern of records instead of classes. It's not strictly necessary for ```Entities``` to be records but records have a few advantages, most notably their equality is performed on the values instead of references. Records, in ```C#```, introduces ```with``` statement where we can change existing structure with new ones in a elegant way, for example:
+All [Core](../../Environment/Core.md) microservices follows the pattern of records instead of classes. It's not strictly necessary for ```Entities``` to be records but records have a few advantages, most notably their equality is performed on the values instead of references. Records, in ```C#```, introduces ```with``` statement where we can change existing structure with new ones in an elegant way, for example:
 ```csharp
 var customer = existingCustomer with 
 {
@@ -83,9 +82,9 @@ Schema management is done via [Schema Providers](../Data/SchemaProviders.md) and
 
 ## Consistency
 
-*Connected* is a multi user environment which means many users can compete for the same resources at the same time. It's unimaginable how difficult is to implement a reliable and consistent solutions which solves this kind of problems. Luckly, *Connected* provides all the necessary services to avoid multi user environment problems. One of the challenges is to ensure data is stored consistent and if more than one user is doing the same operation on the same entity the system still guarantees the data consistency.
+*Connected* is a multi user environment which means many users can compete for the same resources at the same time. It's unimaginable how difficult is to implement a reliable and consistent solutions which solves this kind of problems. Luckly, *Connected* provides all the necessary services to avoid multi user environment problems. One of the challenges is to ensure data is stored consistent and if more than one user is doing the same operation on the same entity, the system still guarantees the data consistency.
 
-To learn more how *Connected* ensures a consistency read the [Consistency](Consistency.md) chapter.
+- To learn more how *Connected* ensures a consistency, please read the [Consistency](Consistency.md) chapter.
 
 ## Concurrency
-Data concurrency represents a similar challenge to the data consistence with the difference that a concurrency problem occurs in the process whereas consistency on the database level. *Connected* handles this issues without any problems, for more information please read thr [Concurrency](Concurrency.md) chapter.
+Data concurrency represents a similar challenge to the data consistency with the difference that a concurrency problem occurs in the process whereas consistency on the database level. *Connected* handles this issues without any problems, for more information please read the [Concurrency](Concurrency.md) chapter.
