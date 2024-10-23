@@ -718,7 +718,7 @@ This is a markup file with a small amount of script code just to bootstrap the [
 
 Set the ```Url``` property to **customers-example/customers**. This is the actual url under which the view will be accessible.
 
-Not add another ```File``` component named **Customers.mjs** and paste the text below into a source file.
+Now add another ```File``` component named **Customers.mjs** and paste the text below into a source file.
 ```javascript
 import { View } from '@lib';
 
