@@ -1,0 +1,144 @@
+# Ambient Providers
+[Dto](Dto.md) object typically contains sufficient data for the [Service Operation](../Services/Operations.md) to be able to perform its actions. Sometimes though some data is either not provided by a [Dto](Dto.md) because the [Service](../Services/README.md) does not want to expose sensitive data to be passed from the client or a [Service Operation](../Services/Operations.md) needs additional data because of the implementation specifics.
+By following a [Separation of Concerns](https://en.wikipedia.org/wiki/Separation_of_concerns) principle the [Service Operation](../Services/Operations.md) should not perform any specific data retrieval actions but expects the data to be already available and validated once the [Service Operation](../Services/Operations.md) is instantiated.
+
+In scenarios where a [Dto](Dto.md) does not provide the entire property set we use ```IAmbientProvider``` [Middleware](Middlewares.md).
+
+```IAmbientProvider``` can contain any schema and is always specific to exactly one [Dto](Dto.md). ```IAmbientProvider``` is automatically registered on [Startup](../../Environment/Startup.md) and is thus available from [Dependency Injection](../DependencyInjection/README.md) container.
+
+> Microservice for this example is available in the [Connected Repository](https://connected.tompit.com/repositories?folder=Repositories%252FTom%2520PIT&document=813&type=Repository).
+
+Let's see an example. We have a [Dto](Dto.md) named ```InsertCommentDto``` which has the following structure:
+```csharp
+using System.ComponentModel.DataAnnotations;
+
+namespace Connected.Academy;
+
+public class InsertCommentDto : Dto
+{
+	[Required, MaxLength(256)]
+	public string Text { get; set; } = default!;
+}
+```
+The client just needs to pass a ```Text``` in the ```ICommentService``` operation named ```Insert```. The source code below shows a model of the ```ICommentService```.
+```csharp
+using System.Threading.Tasks;
+
+namespace Connected.Academy;
+
+public interface ICommentService
+{
+	Task<int> Insert(InsertCommentDto dto);
+}
+```
+Now let's see a model of the ```IComment``` entity below.
+```csharp
+using TomPIT.Entities;
+
+namespace Connected.Academy;
+
+public interface IComment : IEntity<int>
+{
+	string Text { get; init; }
+	DateTimeOffset Created { get; init; }
+	string Identity { get; init; }
+}
+```
+As you can see the ```Entity``` contains two additional properties, named ```Created``` and ```Identity```. We don't want the client to pass those two properties directly since it could do an impersonation and could send a ```Created``` value of a year 2050, for example.
+
+By performing an ```Update``` on the [Storage](../Data/Storage.md), the [Storage Provider](../Data/StorageProviders.md) will expect those two properties to be passed in the call since the entities' properties are not [nullable](../Entities/Nullability.md).
+
+Now let's see how this challenge is solved.
+
+We'll model an ```IAmbientProvider``` for the missing properties, named ```IInsertCommentAmbient``` as follows:
+```csharp
+namespace Connected.Academy;
+
+public interface IInsertCommentAmbient : IAmbientProvider<InsertCommentDto>
+{
+	string Identity { get; set; }
+	DateTimeOffset Created { get; set; }
+}
+```
+The [Middleware](Middlewares.md) inherits from ```IAmbientProvider``` which depends on a specific [Dto](Dto.md). This is very useful because it gives us a reference to the actual [Dto](Dto.md) passed by the client when providing the values.
+
+Our provider introduces the missing properties and will be later used in the [Service Operation](Operations.md). Let's implement the provider first.
+```csharp
+using TomPIT.Authentication;
+using System.Threading.Tasks;
+
+namespace Connected.Academy;
+
+internal sealed class InsertCommentAmbient : AmbientProvider<InsertCommentDto>
+{
+	public InsertCommentAmbient(IAuthenticationService authentication)
+	{
+		Authentication = authentication;
+	}
+
+	private IAuthenticationService Authentication { get; }
+
+	public string Identity { get; set; } = default!;
+
+	public DateTimeOffset Created { get; set; }
+
+	protected override Task OnInvoke()
+	{
+		if (Authentication.Identity is null)
+			throw new NullReferenceException(TomPIT.Strings.ValInvalidUser);
+
+		Identity = Authentication.Identity.Token;
+		Created = DateTimeOffset.UtcNow;
+
+		return Task.CompletedTask;
+	}
+}
+```
+First, we request ```IAuthenticationService``` from the [Dependency Injection](../DependencyInjection/README.md) container. The ```IAuthenticationService``` will be needed to retrieve the current identity since we would like to perform an insert with the currently authenticated client.
+
+If the request is not authenticated we are throwing an ```Exception``` because identity is non [nullable](../Entities/Nullability.md) property on the entity. If the request is authenticated we simply set ```Identity``` property from the authenticated identity token.
+
+Dealing with a ```Create``` property is much more simple. We just take the current ```UTC``` time because we want to perform insert with the timestamp as close to the insert event as possible.
+
+Now let's see how ```IAmbientProvider``` is used in a [Service Operation](../Services/Operations.md).
+```csharp
+using System.Threading.Tasks;
+using TomPIT.Entities.Storage;
+
+namespace Connected.Academy;
+
+internal sealed class Insert : ServiceFunction<InsertCommentDto, int>
+{
+	public Insert(IStorageProvider storage, IInsertCommentAmbient ambient)
+	{
+		Storage = storage;
+		Ambient = ambient;
+	}
+
+	private IStorageProvider Storage { get; }
+	private IInsertCommentAmbient Ambient { get; }
+
+	protected override async Task<int> OnInvoke()
+	{
+		var entity = await Storage.Open<Comment>().Update(Dto.AsEntity<Comment>(State.New, Ambient));
+
+		if (entity is null)
+			throw new NullReferenceException(TomPIT.Strings.ErrEntityExpected);
+
+		return entity.Id;
+	}
+}
+```
+As you can see, in addition to the usual [IStorageProvider](../Data/StorageProviders.md) we also requested ```IInsertCommentAmbient``` from the [Dependency Injection](../DependencyInjection/README.md) container and all we had to do was to pass an additional argument into the ```Update``` call of the [Storage](../Data/Storage.md). *Connected* will do the rest, merging all values together and preparing the ```Entity``` for the insert.
+
+> Note that there is not need to register ```IAmbientProvider``` manually. It gets registered automatically on [Startup](../../Environment/Startup.md).
+
+## Overwriting properties
+
+You have probably noticed that we modeled ambient properties as writable. It was intended because we want the [Middleware](Middlewares.md) to be open, similar to the [Dto](Dto.md) concept. For example, we could later write another [Microservice](../../Microservices/README.md) which would overwrite the identity and try to retrieve it from some remote service without the need to change the existing code.
+
+In cases where we don't want to enable other components to influence the ambient, the model is typically defined in the implementation [Microservice](../../Microservices/README.md) as an internal component instead of the model [Microservice](../../Microservices/README.md) where it is publicly visible by default. 
+
+## Summary
+
+Ambient providers are a powerful technique for achieving a [Separation of Concerns](https://en.wikipedia.org/wiki/Separation_of_concerns) principle and to provide an otherwise missing properties in [Dto](Dto.md).
