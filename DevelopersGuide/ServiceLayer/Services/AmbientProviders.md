@@ -6,12 +6,10 @@ In scenarios where a [Dto](Dto.md) does not provide the entire property set we u
 
 ```IAmbientProvider``` can contain any schema and is always specific to exactly one [Dto](Dto.md). ```IAmbientProvider``` is automatically registered on [Startup](../../Environment/Startup.md) and is thus available from [Dependency Injection](../DependencyInjection/README.md) container.
 
-> Microservice for this example is available in the [Connected Repository](https://connected.tompit.com/repositories?folder=Repositories%252FTom%2520PIT&document=813&type=Repository).
+> Microservice for this example is available in the [Ambient Providers](https://connected.tompit.com/repositories?folder=Repositories%252FConnected%2520Academy&document=818&type=Repository) repository.
 
-Let's see an example. We have a [Dto](Dto.md) named ```InsertCommentDto``` which has the following structure:
+Let's see an example. We have a [Dto](Dto.md) named ```InsertCommentDto``` with the following code:
 ```csharp
-using System.ComponentModel.DataAnnotations;
-
 namespace Connected.Academy;
 
 public class InsertCommentDto : Dto
@@ -20,22 +18,20 @@ public class InsertCommentDto : Dto
 	public string Text { get; set; } = default!;
 }
 ```
-The client just needs to pass a ```Text``` in the ```ICommentService``` operation named ```Insert```. The source code below shows a model of the ```ICommentService```.
+The client just needs to pass a ```Text``` in the ```ICommentService``` operation named ```Insert```. The code below shows a model of the ```ICommentService```.
 ```csharp
-using System.Threading.Tasks;
+namespace Connected.Academy.AmbientProviders;
 
-namespace Connected.Academy;
-
+[Service, ServiceUrl("services/connected/ambient-providers")]
 public interface ICommentService
 {
-	Task<int> Insert(InsertCommentDto dto);
+	[ServiceOperation(ServiceOperationVerbs.Post | ServiceOperationVerbs.Put)]
+	Task Insert(InsertCommentDto dto);
 }
 ```
-Now let's see a model of the ```IComment``` entity below.
+Now let's look at a model of the ```IComment``` entity in the following code:
 ```csharp
-using TomPIT.Entities;
-
-namespace Connected.Academy;
+namespace Connected.Academy.AmbientProviders;
 
 public interface IComment : IEntity<int>
 {
@@ -52,7 +48,7 @@ Now let's see how this challenge is solved.
 
 We'll model an ```IAmbientProvider``` for the missing properties, named ```IInsertCommentAmbient``` as follows:
 ```csharp
-namespace Connected.Academy;
+namespace Connected.Academy.AmbientProviders;
 
 public interface IInsertCommentAmbient : IAmbientProvider<InsertCommentDto>
 {
@@ -62,12 +58,11 @@ public interface IInsertCommentAmbient : IAmbientProvider<InsertCommentDto>
 ```
 The [Middleware](Middlewares.md) inherits from ```IAmbientProvider``` which depends on a specific [Dto](Dto.md). This is very useful because it gives us a reference to the actual [Dto](Dto.md) passed by the client when providing the values.
 
-Our provider introduces the missing properties and will be later used in the [Service Operation](Operations.md). Let's implement the provider first.
+Our provider introduces the missing properties and will be later used in the [Service Operation](Operations.md). Let's implement the provider first with the following code:
 ```csharp
 using TomPIT.Authentication;
-using System.Threading.Tasks;
 
-namespace Connected.Academy;
+namespace Connected.Academy.AmbientProviders;
 
 internal sealed class InsertCommentAmbient : AmbientProvider<InsertCommentDto>
 {
@@ -82,7 +77,7 @@ internal sealed class InsertCommentAmbient : AmbientProvider<InsertCommentDto>
 
 	public DateTimeOffset Created { get; set; }
 
-	protected override Task OnInvoke()
+	protected override async Task OnInvoke()
 	{
 		if (Authentication.Identity is null)
 			throw new NullReferenceException(TomPIT.Strings.ValInvalidUser);
@@ -90,7 +85,7 @@ internal sealed class InsertCommentAmbient : AmbientProvider<InsertCommentDto>
 		Identity = Authentication.Identity.Token;
 		Created = DateTimeOffset.UtcNow;
 
-		return Task.CompletedTask;
+		await Task.CompletedTask;
 	}
 }
 ```
@@ -102,12 +97,11 @@ Dealing with a ```Create``` property is much more simple. We just take the curre
 
 Now let's see how ```IAmbientProvider``` is used in a [Service Operation](../Services/Operations.md).
 ```csharp
-using System.Threading.Tasks;
 using TomPIT.Entities.Storage;
 
-namespace Connected.Academy;
+namespace Connected.Academy.AmbientProviders;
 
-internal sealed class Insert : ServiceFunction<InsertCommentDto, int>
+internal sealed class Insert : ServiceAction<InsertCommentDto>
 {
 	public Insert(IStorageProvider storage, IInsertCommentAmbient ambient)
 	{
@@ -118,14 +112,9 @@ internal sealed class Insert : ServiceFunction<InsertCommentDto, int>
 	private IStorageProvider Storage { get; }
 	private IInsertCommentAmbient Ambient { get; }
 
-	protected override async Task<int> OnInvoke()
+	protected override async Task OnInvoke()
 	{
-		var entity = await Storage.Open<Comment>().Update(Dto.AsEntity<Comment>(State.New, Ambient));
-
-		if (entity is null)
-			throw new NullReferenceException(TomPIT.Strings.ErrEntityExpected);
-
-		return entity.Id;
+		await Storage.Open<Comment>().Update(Dto.AsEntity<Comment>(State.New, Ambient));
 	}
 }
 ```
@@ -135,7 +124,30 @@ As you can see, in addition to the usual [IStorageProvider](../Data/StorageProvi
 
 ## Overwriting properties
 
-You have probably noticed that we modeled ambient properties as writable. It was intended because we want the [Middleware](Middlewares.md) to be open, similar to the [Dto](Dto.md) concept. For example, we could later write another [Microservice](../../Microservices/README.md) which would overwrite the identity and try to retrieve it from some remote service without the need to change the existing code.
+You have probably noticed that we modeled ambient properties as writable. It was intentional because we want the [Middleware](Middlewares.md) to be open, similar to the [Dto](Dto.md) concept. For example, we could later write another [Microservice](../../Microservices/README.md) which would overwrite the identity and try to retrieve it from some remote service without the need to change the existing code.
+
+Let's imagine we have a customer requirement that comments should not be created on *Sunday*. If client tries to insert a comment on *Sunday* we have to move the actual creation date to *Monday*.
+The following code shows how the challenge is solved:
+```csharp
+namespace Connected.Academy.AmbientProviders;
+
+internal sealed class CreatedCalibrator : Calibrator<InsertCommentDto>
+{
+	public CreatedCalibrator(IInsertCommentAmbient ambient)
+	{
+		Ambient = ambient;
+	}
+
+	private IInsertCommentAmbient Ambient { get; }
+
+	protected override async Task OnInvoke()
+	{
+		if (Ambient.Created.DayOfWeek === DayOfWeek.Sunday)
+			Ambient.Created = Ambient.Created.AddDays(1);
+	}
+}
+```
+Note that this code would typically reside in another [Microservice](../../Microservices/README.md). For more information on the preceding example please read how the [Calibrators](Calibrators.md) work.
 
 In cases where we don't want to enable other components to influence the ambient, the model is typically defined in the implementation [Microservice](../../Microservices/README.md) as an internal component instead of the model [Microservice](../../Microservices/README.md) where it is publicly visible by default. 
 
