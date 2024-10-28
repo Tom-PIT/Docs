@@ -10,6 +10,8 @@ Queues consists of an ```IQueueMessages```. ```IQueueMessages``` are [Resources]
 
 ```IQueueMessage``` is never created directly but rather by calling ```Insert``` [Service Operation](../Services/Operations.md) on the ```IQueueService```. ```Insert``` accepts two [Dto](../Services/Dto.md) arguments where the first [Dto](../Services/Dto.md) is the actual [Dto](../Services/Dto.md) argument containing the data needed to process a message. The second [Dto](../Services/Dto.md) argument are options how a message should be created.
 
+> Source code for this example is available in the [Connected.Academy.Queues](https://connected.tompit.com/repositories?folder=Repositories%252FConnected%2520Academy&document=825&type=Repository) repository.
+
 There is another important argument that has to be passed when calling ```Insert``` - the type of the client which will process the message. For example:
 
 ```csharp
