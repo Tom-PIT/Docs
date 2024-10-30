@@ -73,7 +73,7 @@ This stage is performed on the local [Development](Development.md) instance.
 
 Testing is performed on the implemented [Microservices](../Microservices/README.md), for the [Service Layer](../ServiceLayer/README.md) and [User Layer](../UserLayer/README.md). *Unit Tests* are performed for the [Service Layer](../ServiceLayer/README.md) and *User Interface Tests* are performed for the [User Layer](../UserLayer/README.md). If bugs or inconsistencies are found the stage returns to the *Design* and waits for the fix to be available and perform the Test again until the feature is considered fully implemented and working as expected.
 
-If the feature needs to be documented the *Technical Writer* role is involved in this stage to write appropriate documentation. Also, if the feature will need either in person education or video tutorials to be recorder, *Training Specialist* is also involved in this stage.
+If the feature needs to be documented the *Technical Writer* role is involved in this stage to write appropriate documentation. Also, if the feature will need either in person education or video tutorials to be recorded, *Training Specialist* is also involved in this stage.
 
 In smaller teams *Quality Assurance Engineer*, *Technical Writer* and *Training Specialist* could be the same person, but in larger environments roles are typically assigned to different people.
 
