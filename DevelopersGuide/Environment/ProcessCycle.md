@@ -60,7 +60,7 @@ This stage is performed on the local [Development](Development.md) instance.
 
 Design stage means implementing models. A numerous of [Microservices](../Microservices/README.md) are created, typically one for each [Service](../ServiceLayer/Services/README.md) in the [Service Layer](../ServiceLayer/README.md) and one for each [Service](../ServiceLayer/Services/README.md) in the [User Layer](../UserLayer/README.md).
 
-Developers also write Unit Tests in the stage. This stage won't be fully completed before the *Test* stage is performed. They interchangeably occur as frequently as possible with the goal to complete the development stage as soon as possible.
+Developers also write Unit Tests in the stage, and code reviews are performed before the code goes into testing. This stage won't be fully completed before the *Test* stage is performed. They interchangeably occur as frequently as possible with the goal to complete the development stage as soon as possible.
 
 In this stage the following set of experts are involved:
 
