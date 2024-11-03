@@ -1,0 +1,11 @@
+# Images
+
+The fundamental *Deployment* component is an **Image**. An *Image* consists of a set of [Microservices](../Microservices/README.md). Each [Microservice](../Microservices/README.md) in the *Image* has a few settings of which the most important is its **Version**. You can include a [Microservice](../Microservices/README.md) in the *Image* with a non specific or a specific version. Version equals to a [Repository](Repositories.md) [Commit](Repositories.md#commits). If no Version is specified, the latest available [Commit](Repositories.md#commits) will be [Deployed](README.md), otherwise the [Deployment](README.md) will install the targeted [Commit](Repositories.md#commits).
+
+Specific [Commits](Repositories.md#commits) are used mainly for [Testing](../Environment/Staging.md) purposes whereas the [Production](../Environment/Production.md) environments should use the latest version of each [Microservice](../Microservices/README.md). Namely, [Microservices](../Microservices/README.md) have dependencies and for the [Deployment](README.md) to pass a validation, all [Microservices](../Microservices/README.md) must have the dependencies to the same version of the dependent [Microservice](../Microservices/README.md). If *Connected* finds conflicts in the dependencies, it will generate a *Warning*. You'll be able to proceed but it's very likely that a target [Instance](../Environment/Instance.md) will encounter the version conflict issues so it's a good practice to eliminate all Warnings before [Deploying](README.md).
+
+## Create an Image
+
+To create an *Deployment Image* access the [Connected Portal](../Environment/ConnectedPortal.md) and click **Services**. Once you are on the **Services** page, you will see the **Images** button on the toolbar. Click on it and click the **Plus** button on the bottom right corner on the **Application Images** page.
+
+Enter the **Name** of the *Image* and select **Subscriptions** from the token box to view [Microservices](../Microservices/README.md) from the specified [Subscriptions](../Environment/Subscription.md). Check each [Microservice](../Microservices/README.md) you would like to run in the target [Instance](../Environment/Instance.md) and once you are happy with the selection set click **Save**. 

@@ -29,4 +29,4 @@ By clicking on the **Deploy** button the deployment process starts. *Connected* 
 - a recompile occurs for every changed [Microservice](../Microservices/README.md)
 - notifies *Connected Portal* that an upgrade completed either successfully of it's failed
 
-> In some Cloud environments *Connected* performs an upgrade by creating a shadow copy of the environment, performs an upgrade, starts the upgraded [Instance](../Environment/README.md) and than performs a how swap with existing [Instance](../Environment/Instance.md). This way there is a virtually not downtime when upgrading an [Instance](../Environment/Instance.md).
+> In some Cloud environments *Connected* performs an upgrade by creating a shadow copy of the environment, performs an upgrade, starts the upgraded [Instance](../Environment/README.md) and then performs a how swap with existing [Instance](../Environment/Instance.md). This way there is a virtually not downtime when upgrading an [Instance](../Environment/Instance.md).
