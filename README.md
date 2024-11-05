@@ -1,4 +1,4 @@
-# Tom PIT Docs
+# Connected Docs
 
 Learn to use *Connected* to model, implement, test, deploy, run and manage [Digital Content](DevelopersGuide/Environment/DigitalContent.md). Browse examples, learn how to setup a local environment, discover cloud infrastructure and more.
 
