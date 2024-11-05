@@ -1,6 +1,6 @@
 # Service Operations
 
-[Services](README.md) consists of one or more methods which are called operations. Operation are not typical methods found in ```classes```, they behave very differently. A typical Operation call has a complex, but well designed pipeline which executes in stages.
+[Services](README.md) consists of one or more methods which are called operations. Operations are not typical methods found in ```classes```, they behave very differently. A typical Operation call has a complex, but well designed pipeline which executes in stages.
 
 > It is not necessary to use the *Connected* service pipeline but it is highly recommended since it encapsulates all the complexity needed to properly execute a single operation.
 
