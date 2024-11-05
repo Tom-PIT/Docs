@@ -52,3 +52,7 @@ The browser will display **"Hello world. It's a beautiful day, isn't it?"**.
 This wasn't hard, wasn't it? In fact, no task is hard in the *Connected*, event if your environment is an extremely demanding one. By following *Connected* best practices and [guidelines](../../Guidelines/README.md) and with the help of tons of services, components and tools *Connected* provides, you'll be able to solve complex business problems in virtually no time.
 
 Welcome again to the exciting world of *Tom PIT.connected*.
+
+## Next Steps
+
+- [Customers Example](CustomersExample.md)

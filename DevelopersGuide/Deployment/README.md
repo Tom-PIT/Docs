@@ -1,18 +1,18 @@
 # Deployment
 
-*Connected* uses a centralized source code management system for versioning and deployment of [Microservices](../Microservices/README.md). The only way to transfer changes between environments is by using the [Repositories](Repositories.md).
+*Connected* uses a centralized **Source Code Management** system for versioning and deployment of [Microservices](../Microservices/README.md). In fact, the only way to transfer changes between environments is by using the [Repositories](Repositories.md).
 
-*Connected* provides fully automatic *Deployment* infrastructure without the need to manually install or upgrade [Microservices](../Microservices/README.md).
+With the help of *Repositories*, *Connected* provides fully automatic *Deployment* infrastructure without the need to manually install or upgrade *Microservices*.
 
 ## Development and Quality
 
-[Development](../Environment/Development.md) and [Quality](../Environment/Quality.md) [Instances](../Environment/Instance.md) do not use the [Images](Images.md) since they not contain an actual [Image](Images.md) which is run on an either [Staging](../Environment/Staging.md) or [Production](../Environment/Production.md) [Instance](../Environment/Instance.md).
+[Development](../Environment/Development.md) and [Quality](../Environment/Quality.md) [Instances](../Environment/Instance.md) do not use the [Images](Images.md) because they not represent the very same [Environment](../Environment/README.md) as either [Staging](../Environment/Staging.md) or [Production](../Environment/Production.md) *Instance*.
 
-Those two [Instances](../Environment/Instance.md) use primarily an [IDE](../IDE/README.md) to retrieve the changes they need. Namely, a *Developer* or a *Quality Assurance Engineer* typically works on a specific feature which is implemented and the entire production image is in most cases not necessary. Once the [Quality](../Environment/Quality.md) stage is completed the *Deployment* infrastructure takes place.
+Those two *Instances* use primarily an [IDE](../IDE/README.md) to retrieve the changes they need. Namely, a *Developer* or a *Quality Assurance Engineer* is typically focused on a specific feature which is implemented and the entire *Production Image* is in most cases not necessary. Once the *Quality* stage is completed the *Deployment* infrastructure takes place.
 
 ## Staging and Production
 
-[Staging](../Environment/Staging.md) and [Procution](../Environment/Production.md) [Instances](../Environment/Instance.md) are fully managed by a *Connected Deployment Infrastructure*. Every [Instance](../Environment/Instance.md) has an [Image](Images.md) which describes which set of [Microservices](../Microservices/README.md) is installed. If we want to upgrade an [Instance](../Environment/Instance.md) we do it through the *Connected Portal*. To perform an *Upgrade* or a *Fresh Install* follow this steps:
+*Staging* and *Production* *Instances* are fully managed by a *Connected Deployment Infrastructure*. Every *Instance* has an [Image](Images.md) which defines which set of *Microservices* will the target *Instance* run. If we want to upgrade an *Instance* we always do it through the [Connected Portal](../Environment/ConnectedPortal.md). To perform an *Upgrade* or a *Fresh Install* follow this steps:
 
 - Go to the *Connected Portal* and click **Services**
 - Click on the Service you would like to upgrade
