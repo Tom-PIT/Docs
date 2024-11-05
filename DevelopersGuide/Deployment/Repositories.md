@@ -30,24 +30,24 @@ In the bottom right corner of the [IDE](../IDE/README.md) is the *Repositories* 
 - Branch
 
 The following image shows the status bar:
-![Repositories Status Bar](/Assets/RepositoriesStatusBar.png)
+![Repositories Status Bar](../Assets/RepositoriesStatusBar.png)
 
 #### Credentials
 
 Before you can use the *Repositories* you must connect your local credentials with the [Connected Portal](../Environment/ConnectedPortal.md). This is how your status bar would look like if you are not authenticated in the [Connected Portal](../Environment/ConnectedPortal.md):
 
-![Repositories Status Bar Anonymous](/Assets/RepositoriesStatusBarAnonymous.png)
+![Repositories Status Bar Anonymous](../Assets/RepositoriesStatusBarAnonymous.png)
 
 If you don't have a valid *Connected* account it's time to get one. To create an account, follow the steps in the [Connected Portal](../Environment/ConnectedPortal.md).
 
 Once you have a valid account, click on an **Not Authenticated** button. A *Designer* opens up asking for a *Connected* credentials:
-![Linkinkg Connected Account](/Assets/LinkConnectedAccount.png)
+![Linkinkg Connected Account](../Assets/LinkConnectedAccount.png)
 
 Enter *Connected* credentials and clock on a **Connect** button. If you've entered a valid credentials you will see your name displayed in the status bar.
 
 You can now proceed with the creating a *Repository*. Click on a **Bind** button and a **Create Repository** designer will show up
 
-![Create Repository](/Assets/CreateRepository.png)
+![Create Repository](../Assets/CreateRepository.png)
 
 In the **Subscription** select box you you will see all Subscriptions you have access to. Choose the `Subscription` carefully because you cannot move the *Repository* between subscriptions and each Microservice can be hosted in only one *Repository*.
 
