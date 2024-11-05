@@ -1,5 +1,12 @@
 # Tom PIT Docs
-This repository contains the basic documentation about the Tom PIT platform. The source code for the platform shell can be found [here](https://github.com/Tom-PIT/Connected).
 
-Table of contents: 
-- [Getting started guide](https://github.com/Tom-PIT/Docs/tree/main/GettingStarted)
+Learn to use *Connected* to model, implement, test, deploy, run and manage [Digital Content](DevelopersGuide/Environment/DigitalContent.md). Browse examples, learn how to setup a local environment, discover cloud infrastructure and more.
+
+Next steps:
+
+- [setup local environment](GettingStarted/README.md)
+- [read Developers documentation](DevelopersGuide/README.md)
+
+---
+
+The source code for the `Shell` is available in the [Tom PIT Connected](https://github.com/Tom-PIT/Connected) repo.
