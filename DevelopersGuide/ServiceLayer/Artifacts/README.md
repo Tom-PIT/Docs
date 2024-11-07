@@ -12,7 +12,7 @@ The first three artifacts are described as [Entities](../Entities/README.md).
 
 ## Types
 
-*Types* are the most common artifact and represent a simple data structure consisted of one or more properties. *Types* are divided in two categories:
+*Types* are the most common artifact and represent a simple data structure consisting of one or more properties. *Types* are divided in two categories:
 
 - Active
 - Passive
@@ -39,8 +39,6 @@ Beside the data structure, *Types* don't offer any other meaningful value. They 
 *Types* can reference other *Types*, but they cannot reference *Resources* nor *Documents*.
 
 *Types* don't have any business logic beside an ordinal input [Validation](../Services/Validation.md).
-
-- learn more about [Types](Types.md)
 
 ### Dependencies
 
