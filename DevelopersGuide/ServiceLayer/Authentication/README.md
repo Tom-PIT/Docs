@@ -96,3 +96,9 @@ internal sealed class Authentication : BasicAuthentication
 }
 ```
 If you are not happy with the default implementation you exclude `TomPIT.Core.Authentication.Basic` from the [Deployment Image](../../Deployment/Images.md) and implement your own.
+
+---
+
+**Next Steps**
+
+- [Authentication Providers](Providers.md)
