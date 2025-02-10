@@ -61,6 +61,8 @@ services:
     - settings__1__value=true
     - settings__2__name=Cors Origins
     - settings__2__value=http://127.0.0.1:44003,http://127.0.0.1:${DEV_PORT},http://127.0.0.1:${QA_PORT}
+    - routing__baseUrl=http://127.0.0.1:${DEV_PORT} 
+    - sourceFiles__folder=/microServices/sources
     ports:
       - ${DEV_PORT}:44003
       - 44003
@@ -115,10 +117,12 @@ services:
     - settings__1__name=Cors Enabled
     - settings__1__value=true
     - settings__2__name=Cors Origins
-    - settings__2__value=http://127.0.0.1:44003,http://127.0.0.1:${QA_PORT}
+    - settings__2__value=http://127.0.0.1:44003,http://host.docker.internal:${QA_PORT},http://127.0.0.1:${QA_PORT}
     ports:
       - ${QA_PORT}:44003
       - 44003
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./qa/microServices:/microServices:rw
       - ./qa/packages:/home/tompit/packages:rw
