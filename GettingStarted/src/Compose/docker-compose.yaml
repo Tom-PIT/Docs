@@ -44,7 +44,7 @@ services:
       sqlserver.configurator:
         condition: service_completed_successfully
     environment:      
-    - ASPNETCORE_URLS=http://0.0.0.0:44003
+    - ASPNETCORE_URLS=http://0.0.0.0:44003;http://0.0.0.0:${DEV_PORT}
     - sys__url=http://127.0.0.1:44003    
     - instanceEndpoints__0__url=http://127.0.0.1:${DEV_PORT}
     - stage=development
@@ -99,7 +99,7 @@ services:
       start_period: 300s
       timeout: 30s
     environment:    
-    - ASPNETCORE_URLS=http://0.0.0.0:44003
+    - ASPNETCORE_URLS=http://0.0.0.0:44003;http://0.0.0.0:${QA_PORT}
     - optimization=debug
     - features=${QA_FEATURES}
     - sys__url=http://platform_dev:44003  
